@@ -1,0 +1,78 @@
+"Region","Country","ISO","Est","LI","UI","Date"
+"South Asia","Afghanistan","AF",1.25,0.89,1.75,2019
+"Western Europe","Albania","AL",0.88,0.63,1.24,2019
+"Middle East and North Africa","Algeria","DZ",0.56,0.45,0.7,2019
+"Eastern Europe","Armenia","AM",0.92,0.72,1.17,2019
+"Australasia","Australia","AU",1.01,0.97,1.05,2019
+"Western Europe","Austria","AT",0.88,0.63,1.24,2019
+"Eastern Europe","Azerbaijan","AZ",0.92,0.72,1.17,2019
+"Middle East and North Africa","Bahrain","BH",0.56,0.45,0.7,2019
+"South Asia","Bangladesh","BD",1.25,0.89,1.75,2019
+"Eastern Europe","Belarus","BY",0.92,0.72,1.17,2019
+"Western Europe","Belgium","BE",0.88,0.63,1.24,2019
+"Sub Saharan Africa","Benin","BJ",0.98,0.53,1.8,2019
+"Eastern Europe","Bulgaria","BG",0.94,0.85,1.04,2019
+"East and South East Asia","Cambodia","KH",0.79,0.71,0.88,2019
+"North America","Canada","CA",0.99,0.94,1.03,2019
+"East and South East Asia","China","CN",0.97,0.77,1.23,2019
+"Latin America","Colombia","CO",0.935,0.8,1.11,2019
+"Sub Saharan Africa","Côte d'Ivoire","CI",0.98,0.53,1.8,2019
+"Middle East and North Africa","Cyprus","CY",0.56,0.45,0.7,2019
+"Sub Saharan Africa","Democratic Republic of the Congo","CD",0.98,0.53,1.8,2019
+"Western Europe","Denmark","DK",0.88,0.63,1.24,2019
+"Eastern Europe","Estonia","EE",0.94,0.76,1.16,2019
+"Western Europe","Finland","FI",0.87,0.78,0.98,2019
+"Western Europe","France","FR",0.9,0.8,1.03,2019
+"Eastern Europe","Georgia","GE",0.92,0.72,1.17,2019
+"Western Europe","Germany","DE",1.01,0.93,1.09,2019
+"Western Europe","Greece","GR",1.13,0.78,1.63,2019
+"South Asia","India","IN",1.47,1.16,1.86,2019
+"East and South East Asia","Indonesia","ID",0.86,0.74,1,2019
+"South Asia","Iran (Islamic Republic of)","IR",1.16,0.93,1.46,2019
+"Western Europe","Italy","IT",0.88,0.63,1.24,2019
+"Sub Saharan Africa","Kenya","KE",0.65,0.29,1.46,2019
+"Central Asia","Kyrgyzstan","KG",1.28,1.05,1.56,2019
+"East and South East Asia","Lao People's Democratic Republic","LA",0.79,0.71,0.88,2019
+"Eastern Europe","Latvia","LV",0.92,0.72,1.17,2019
+"Middle East and North Africa","Libyan Arab Jamahiriya","LY",0.56,0.45,0.7,2019
+"Eastern Europe","Lithuania","LT",0.83,0.64,1.06,2019
+"Western Europe","Luxembourg","LU",0.88,0.63,1.24,2019
+"Sub Saharan Africa","Madagascar","MG",1.14,0.52,2.5,2019
+"East and South East Asia","Malaysia","MY",0.79,0.71,0.88,2019
+"Western Europe","Malta","MT",0.88,0.63,1.24,2019
+"Sub Saharan Africa","Mauritius","MU",0.98,0.53,1.8,2019
+"Latin America","Mexico","MX",0.935,0.8,1.11,2019
+"Eastern Europe","Moldova (Republic of)","MD",0.92,0.72,1.17,2019
+"Middle East and North Africa","Morocco","MA",0.56,0.45,0.7,2019
+"Sub Saharan Africa","Mozambique","MZ",0.98,0.53,1.8,2019
+"East and South East Asia","Myanmar","MM",0.4,0.21,0.74,2019
+"South Asia","Nepal","NP",0.32,0.21,0.48,2019
+"Western Europe","Netherlands","NL",0.88,0.63,1.24,2019
+"Latin America","Nicaragua","NI",0.935,0.8,1.11,2019
+"Sub Saharan Africa","Nigeria","NG",0.98,0.53,1.8,2019
+"Western Europe","Norway","NO",1.01,0.9,1.12,2019
+"South Asia","Pakistan","PK",1.25,0.89,1.75,2019
+"East and South East Asia","Philippines","PH",0.79,0.71,0.88,2019
+"Eastern Europe","Poland","PL",0.88,0.76,1.01,2019
+"Western Europe","Portugal","PT",0.96,0.73,1.26,2019
+"Caribbean","Puerto Rico","PR",0.935,0.8,1.11,2019
+"Eastern Europe","Romania","RO",0.92,0.72,1.17,2019
+"Eastern Europe","Russian Federation","RU",0.92,0.72,1.17,2019
+"Middle East and North Africa","Saudi Arabia","SA",0.56,0.45,0.7,2019
+"Sub Saharan Africa","Senegal","SN",0.98,0.53,1.8,2019
+"Sub Saharan Africa","Seychelles","SC",0.98,0.53,1.8,2019
+"Sub Saharan Africa","Sierra Leone","SL",0.98,0.53,1.8,2019
+"Western Europe","Slovenia","SI",0.88,0.63,1.24,2019
+"Sub Saharan Africa","South Africa","ZA",0.98,0.53,1.8,2019
+"Western Europe","Spain","ES",0.93,0.88,0.98,2019
+"East and South East Asia","Taiwan, Province of China","TW",0.79,0.71,0.88,2019
+"Central Asia","Tajikistan","TJ",0.9,0.74,1.09,2019
+"Sub Saharan Africa","Tanzania (United Republic of)","TZ",1,0.57,1.77,2019
+"East and South East Asia","Thailand","TH",0.79,0.71,0.88,2019
+"Middle East and North Africa","Tunisia","TN",0.15,0.05,0.46,2019
+"Eastern Europe","Ukraine","UA",0.95,0.89,1.01,2019
+"Western Europe","United Kingdom","GB",0.88,0.63,1.24,2019
+"North America","United States of America","US",0.88,0.66,1.19,2019
+"Latin America","Uruguay","UY",NA,NA,NA,2019
+"Central Asia","Uzbekistan","UZ",0.9,0.74,1.09,2019
+"East and South East Asia","Viet Nam","VN",0.96,0.78,1.19,2019

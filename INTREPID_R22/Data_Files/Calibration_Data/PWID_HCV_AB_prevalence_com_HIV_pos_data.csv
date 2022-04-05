@@ -1,0 +1,78 @@
+"Region","Country","ISO","Est","LI","UI","Date"
+"South Asia","Afghanistan","AF",0.83,0.72,0.88,2017
+"Western Europe","Albania","AL",0.7,0.37,0.91,2017
+"Middle East and North Africa","Algeria","DZ",0.88,NA,NA,2017
+"Eastern Europe","Armenia","AM",0.83,0.56,0.98,2017
+"Australasia","Australia","AU",0.82,0.55,0.88,2017
+"Western Europe","Austria","AT",0.7,0.37,0.91,2017
+"Eastern Europe","Azerbaijan","AZ",0.83,0.56,0.98,2017
+"Middle East and North Africa","Bahrain","BH",0.88,NA,NA,2017
+"South Asia","Bangladesh","BD",0.83,0.72,0.88,2017
+"Eastern Europe","Belarus","BY",0.83,0.56,0.98,2017
+"Western Europe","Belgium","BE",0.7,0.37,0.91,2017
+"Sub Saharan Africa","Benin","BJ",0.74,0.48,0.99,2017
+"Eastern Europe","Bulgaria","BG",0.83,0.56,0.98,2017
+"East and South East Asia","Cambodia","KH",0.96,NA,NA,2017
+"North America","Canada","CA",0.824,0.824,0.954,2017
+"East and South East Asia","China","CN",0.96,0.184,0.993,2017
+"Latin America","Colombia","CO",0.82,0.24,0.88,2017
+"Sub Saharan Africa","CI","CI",0.74,0.48,0.99,2017
+"Middle East and North Africa","Cyprus","CY",0.88,NA,NA,2017
+"Sub Saharan Africa","Democratic Republic of the Congo","CD",0.74,0.48,0.99,2017
+"Western Europe","Denmark","DK",0.948,0.37,0.91,2017
+"Eastern Europe","Estonia","EE",0.563,0.56,0.98,2017
+"Western Europe","Finland","FI",0.7,0.37,0.91,2017
+"Western Europe","France","FR",0.833,0.37,0.91,2017
+"Eastern Europe","Georgia","GE",0.83,0.56,0.98,2017
+"Western Europe","Germany","DE",0.821,0.821,0.92,2017
+"Western Europe","Greece","GR",0.7,0.37,0.91,2017
+"South Asia","India","IN",0.728,0.72,0.941,2017
+"East and South East Asia","Indonesia","ID",0.834,0.69,0.834,2017
+"South Asia","Iran (Islamic Republic of)","IR",0.885,0.039,0.899,2017
+"Western Europe","Italy","IT",0.952,0.457,0.962,2017
+"Sub Saharan Africa","Kenya","KE",0.74,0.48,0.99,2017
+"Central Asia","Kyrgyzstan","KG",0.83,0.56,0.98,2017
+"East and South East Asia","Lao People's Democratic Republic","LA",0.96,NA,NA,2017
+"Eastern Europe","Latvia","LV",0.85,0.85,0.875,2017
+"Middle East and North Africa","Libyan Arab Jamahiriya","LY",0.88,NA,NA,2017
+"Eastern Europe","Lithuania","LT",0.513,0.56,0.98,2017
+"Western Europe","Luxembourg","LU",0.7,0.37,0.91,2017
+"Sub Saharan Africa","Madagascar","MG",0.74,0.48,0.99,2017
+"East and South East Asia","Malaysia","MY",0.658,NA,NA,2017
+"Western Europe","Malta","MT",0.7,0.37,0.91,2017
+"Sub Saharan Africa","Mauritius","MU",0.996,0.48,0.99,2017
+"Latin America","Mexico","MX",0.82,0.24,0.88,2017
+"Eastern Europe","Moldova (Republic of)","MD",0.83,0.56,0.98,2017
+"Middle East and North Africa","Morocco","MA",0.88,NA,NA,2017
+"Sub Saharan Africa","Mozambique","MZ",0.74,0.48,0.99,2017
+"East and South East Asia","Myanmar","MM",0.884,NA,NA,2017
+"South Asia","Nepal","NP",0.83,0.72,0.88,2017
+"Western Europe","Netherlands","NL",0.939,0.916,0.939,2017
+"Latin America","Nicaragua","NI",0.82,0.24,0.88,2017
+"Sub Saharan Africa","Nigeria","NG",0.74,0.48,0.99,2017
+"Western Europe","Norway","NO",0.227,0.37,0.91,2017
+"South Asia","Pakistan","PK",0.83,0.72,0.88,2017
+"East and South East Asia","Philippines","PH",0.96,NA,NA,2017
+"Eastern Europe","Poland","PL",0.766,0.766,0.961,2017
+"Western Europe","Portugal","PT",0.367,0.367,0.838,2017
+"Caribbean","Puerto Rico","PR",0.242,0.242,0.922,2017
+"Eastern Europe","Romania","RO",0.404,0.56,0.98,2017
+"Eastern Europe","Russian Federation","RU",0.6,0.19,0.93,2017
+"Middle East and North Africa","Saudi Arabia","SA",0.88,NA,NA,2017
+"Sub Saharan Africa","Senegal","SN",0.74,0.48,0.99,2017
+"Sub Saharan Africa","Seychelles","SC",0.74,0.48,0.99,2017
+"Sub Saharan Africa","Sierra Leone","SL",0.74,0.48,0.99,2017
+"Western Europe","Slovenia","SI",0.7,0.37,0.91,2017
+"Sub Saharan Africa","South Africa","ZA",0.74,0.48,0.99,2017
+"Western Europe","Spain","ES",0.699,0.699,0.938,2017
+"East and South East Asia","Taiwan, Province of China","TW",0.986,0.866,0.986,2017
+"Central Asia","Tajikistan","TJ",0.983,0.56,0.98,2017
+"Sub Saharan Africa","Tanzania (United Republic of)","TZ",0.483,0.48,0.99,2017
+"East and South East Asia","Thailand","TH",0.96,NA,NA,2017
+"Middle East and North Africa","Tunisia","TN",0.88,NA,NA,2017
+"Eastern Europe","Ukraine","UA",0.976,0.713,0.976,2017
+"Western Europe","United Kingdom","GB",0.553,0.245,0.822,2017
+"North America","United States of America","US",0.835,0.08,0.947,2017
+"Latin America","Uruguay","UY",0.82,0.24,0.88,2017
+"Central Asia","Uzbekistan","UZ",0.83,0.56,0.98,2017
+"East and South East Asia","Viet Nam","VN",0.885,NA,NA,2017

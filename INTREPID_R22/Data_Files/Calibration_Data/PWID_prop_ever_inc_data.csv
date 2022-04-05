@@ -1,0 +1,78 @@
+Region,Country,ISO,Est,LI,UI,Date
+South Asia,Afghanistan,AF,0.518,0.399,0.637,2017
+Western Europe,Albania,AL,0.471,0.38,0.564,2017
+Middle East and North Africa,Algeria,DZ,0.809,0.743,0.87,2017
+Eastern Europe,Armenia,AM,0.357,0.316,0.4,2017
+Australasia,Australia,AU,0.528,0.446,0.609,2017
+Western Europe,Austria,AT,0.36,0.298,0.411,2017
+Eastern Europe,Azerbaijan,AZ,0.279,0.165,0.392,2017
+Middle East and North Africa,Bahrain,BH,0.809,0.743,0.87,2017
+South Asia,Bangladesh,BD,0.552,0.347,0.757,2017
+Eastern Europe,Belarus,BY,0.357,0.316,0.4,2017
+Western Europe,Belgium,BE,0.36,0.298,0.411,2017
+Sub Saharan Africa,Benin,BJ,0.371,0.328,0.414,2017
+Eastern Europe,Bulgaria,BG,0.357,0.316,0.4,2017
+East and South East Asia,Cambodia,KH,0.294,0.214,0.385,2017
+North America,Canada,CA,0.828,0.806,0.848,2017
+East and South East Asia,China,CN,0.784,0.738,0.825,2017
+Latin America,Colombia,CO,0.71,0.682,0.737,2017
+Sub Saharan Africa,CI,CI,0.561,0.424,0.693,2017
+Middle East and North Africa,Cyprus,CY,0.275,0.146,0.439,2017
+Sub Saharan Africa,Democratic Republic of the Congo,CD,0.371,0.328,0.414,2017
+Western Europe,Denmark,DK,0.36,0.298,0.411,2017
+Eastern Europe,Estonia,EE,0.57,0.501,0.639,2017
+Western Europe,Finland,FI,0.36,0.298,0.411,2017
+Western Europe,France,FR,0.36,0.298,0.411,2017
+Eastern Europe,Georgia,GE,0.357,0.316,0.4,2017
+Western Europe,Germany,DE,0.767,0.678,0.855,2017
+Western Europe,Greece,GR,0.381,0.174,0.588,2017
+South Asia,India,IN,0.508,0.389,0.627,2017
+East and South East Asia,Indonesia,ID,0.756,0.709,0.799,2017
+South Asia,Iran (Islamic Republic of),IR,0.69,0.631,0.748,2017
+Western Europe,Italy,IT,0.084,0.046,0.122,2017
+Sub Saharan Africa,Kenya,KE,0.371,0.328,0.414,2017
+Central Asia,Kyrgyzstan,KG,0.406,0.3065,0.511,2017
+East and South East Asia,Lao People's Democratic Republic,LA,0.756,0.709,0.799,2017
+Eastern Europe,Latvia,LV,0.483,0.439,0.527,2017
+Middle East and North Africa,Libyan Arab Jamahiriya,LY,0.809,0.743,0.87,2017
+Eastern Europe,Lithuania,LT,0.707,0.66,0.752,2017
+Western Europe,Luxembourg,LU,0.36,0.298,0.411,2017
+Sub Saharan Africa,Madagascar,MG,0.371,0.328,0.414,2017
+East and South East Asia,Malaysia,MY,0.756,0.709,0.799,2017
+Western Europe,Malta,MT,0.36,0.298,0.411,2017
+Sub Saharan Africa,Mauritius,MU,0.796,0.758,0.83,2017
+Latin America,Mexico,MX,0.71,0.682,0.744,2017
+Eastern Europe,Moldova (Republic of),MD,0.357,0.316,0.4,2017
+Middle East and North Africa,Morocco,MA,0.77,0.702,0.839,2017
+Sub Saharan Africa,Mozambique,MZ,0.371,0.328,0.414,2017
+East and South East Asia,Myanmar,MM,0.329,0.257,0.408,2017
+South Asia,Nepal,NP,0.684,0.567,0.801,2017
+Western Europe,Netherlands,NL,0.36,0.298,0.411,2017
+Latin America,Nicaragua,NI,0.71,0.682,0.737,2017
+Sub Saharan Africa,Nigeria,NG,0.371,0.328,0.414,2017
+Western Europe,Norway,NO,0.68,0.605,0.749,2017
+South Asia,Pakistan,PK,0.521,0.184,0.857,2017
+East and South East Asia,Philippines,PH,0.756,0.709,0.799,2017
+Eastern Europe,Poland,PL,0.44,0.396,0.483,2017
+Western Europe,Portugal,PT,0.36,0.298,0.411,2017
+Caribbean,Puerto Rico,PR,0.824,0.79,0.857,2017
+Eastern Europe,Romania,RO,0.403,0.274,0.533,2017
+Eastern Europe,Russian Federation,RU,0.338,0.305,0.372,2017
+Middle East and North Africa,Saudi Arabia,SA,0.809,0.743,0.87,2017
+Sub Saharan Africa,Senegal,SN,0.371,0.328,0.414,2017
+Sub Saharan Africa,Seychelles,SC,0.371,0.328,0.414,2017
+Sub Saharan Africa,Sierra Leone,SL,0.371,0.328,0.414,2017
+Western Europe,Slovenia,SI,0.36,0.298,0.411,2017
+Sub Saharan Africa,South Africa,ZA,0.415,0.325,0.51,2017
+Western Europe,Spain,ES,0.518,0.372,0.665,2017
+East and South East Asia,"Taiwan, Province of China",TW,0.894,0.877,0.912,2017
+Central Asia,Tajikistan,TJ,0.406,0.3065,0.511,2017
+Sub Saharan Africa,Tanzania (United Republic of),TZ,0.352,0.32,0.384,2017
+East and South East Asia,Thailand,TH,0.757,0.725,0.789,2017
+Middle East and North Africa,Tunisia,TN,0.809,0.743,0.87,2017
+Eastern Europe,Ukraine,UA,0.353,0.301,0.406,2017
+Western Europe,United Kingdom,GB,0.36,0.298,0.411,2017
+North America,United States of America,US,0.707,0.592,0.823,2017
+Latin America,Uruguay,UY,0.71,0.682,0.737,2017
+Central Asia,Uzbekistan,UZ,0.406,0.3065,0.511,2017
+East and South East Asia,Viet Nam,VN,0.756,0.709,0.799,2017
