@@ -270,11 +270,11 @@ perc_HIV_red_OST_withCI=join(horzcat(round(perc_HIV_red_OST,3)," [95%CI:", round
 OST_2022_withCI=join(horzcat(round(OST_2022,3)," [95%CI:", round(OST_2022_CI(1),3),"-",round(OST_2022_CI(2),3),"]"));
 OST_2030_withCI=join(horzcat(round(OST_2030,3)," [95%CI:", round(OST_2030_CI(1),3),"-",round(OST_2030_CI(2),3),"]"));
 
-prop_hivnew_averted_cumsum_OST_CI_final=join(horzcat(round(prop_hivnew_averted_cumsum_OST,3)," [95%CI:", round(prop_hivnew_averted_cumsum_OST_CI(1),3),"-",round(prop_hivnew_averted_cumsum_OST_CI(2),3),"]"));
-prop_hivnew_averted_cumsum_ART_CI_final=join(horzcat(round(prop_hivnew_averted_cumsum_ART,3)," [95%CI:", round(prop_hivnew_averted_cumsum_ART_CI(1),3),"-",round(prop_hivnew_averted_cumsum_ART_CI(2),3),"]"));
+prop_hivnew_averted_cumsum_OST_CI_final=join(horzcat(100*round(prop_hivnew_averted_cumsum_OST,3)," [95%CI:", 100*round(prop_hivnew_averted_cumsum_OST_CI(1),3),"-",100*round(prop_hivnew_averted_cumsum_OST_CI(2),3),"]"));
+prop_hivnew_averted_cumsum_ART_CI_final=join(horzcat(100*round(prop_hivnew_averted_cumsum_ART,3)," [95%CI:", 100*round(prop_hivnew_averted_cumsum_ART_CI(1),3),"-",100*round(prop_hivnew_averted_cumsum_ART_CI(2),3),"]"));
 
-prop_hivnew_averted_auc_OST_CI_final=join(horzcat(round(prop_hivnew_averted_auc_OST,3)," [95%CI:", round(prop_hivnew_averted_auc_OST_CI(1),3),"-",round(prop_hivnew_averted_auc_OST_CI(2),3),"]"));
-prop_hivnew_averted_auc_ART_CI_final=join(horzcat(round(prop_hivnew_averted_auc_ART,3)," [95%CI:", round(prop_hivnew_averted_auc_ART_CI(1),3),"-",round(prop_hivnew_averted_auc_ART_CI(2),3),"]"));
+prop_hivnew_averted_auc_OST_CI_final=join(horzcat(100*round(prop_hivnew_averted_auc_OST,3)," [95%CI:", 100*round(prop_hivnew_averted_auc_OST_CI(1),3),"-",100*round(prop_hivnew_averted_auc_OST_CI(2),3),"]"));
+prop_hivnew_averted_auc_ART_CI_final=join(horzcat(100*round(prop_hivnew_averted_auc_ART,3)," [95%CI:", 100*round(prop_hivnew_averted_auc_ART_CI(1),3),"-",100*round(prop_hivnew_averted_auc_ART_CI(2),3),"]"));
 
 
 
