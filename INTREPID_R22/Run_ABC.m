@@ -5,7 +5,7 @@ seed = 22106;
 iterations = 1000;
 perturbation = 0.05;
 length_distance =2;
-N=3;
+N=1000;
 
 if pp == 1
     pc = parcluster('local');
