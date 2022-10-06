@@ -7,9 +7,14 @@ for k = 1:numel(fields)
     params.(char(fields(k))) = x(:,k);
 end
 
+
+
+
+
 filename = [ISO,'_Data.mat'];
 Cal_Data = load(filename);
 
+params2.RR_HIV_NSP = params.RR_HIV_NSP ;
 
 params.RR_inject_young = 1;
 params2.homeless_start = params.homeless_start;
@@ -36,11 +41,14 @@ params2.transition_post_release_risk = 12/12;
 
 %% ART and OST start dates and prison availability
 [params2.ART_start_date, params2.OST_start_date, params2.NSP_start_date] = Get_start_dates(ISO);
-[params2.ART_end_date, params2.OST_end_date, params2.NSP_start_date] = Get_end_dates(ISO);
+[params2.ART_end_date, params2.OST_end_date, params2.NSP_end_date] = Get_end_dates(ISO);
 [params2.ART_prison, params2.OST_prison, params2.NSP_prison] = Get_ART_HR_prison(ISO);
 
 params2.OST_cal_date = Cal_Data.Data.PWID_prop_current_OST_com.time_pt(end);
 params2.ART_cal_date = Cal_Data.Data.PWID_prop_current_ART_com.time_pt(end);
+
+params2.NSP_cal_date = Cal_Data.Data.PWID_prop_current_NSP_com.time_pt;
+params2.NSP_cal_Est = Cal_Data.Data.PWID_prop_current_NSP_com.estimate;
 
 %% Apply ratio of female to male HIV transmission rate
 params.HIV_sex_transmission_f = params.HIV_sex_transmission_fm*params.HIV_sex_transmission_m;
@@ -316,9 +324,8 @@ switch model
             tmp1= deathdata(myoutfemale,:).Value;
             tmp2= deathdata(myoutmale,:).Value;
           x =  params.prop_new_PWID_male*tmp2 + (1-params.prop_new_PWID_male)*tmp1;
-
         params2.mu_death_ex = 1./x;
-
+        %params2.mu_death_ex
         
         
        

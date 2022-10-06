@@ -1,78 +1,78 @@
-"ISO","Region","Country","Date"
-"AF","South Asia","Afghanistan",2009
-"AL","Western Europe","Albania",2004
-"AM","Eastern Europe","Armenia",2005
-"AT","Western Europe","Austria",2002
-"AU","Australasia","Australia",2002
-"AZ","Eastern Europe","Azerbaijan",2006
-"BD","South Asia","Bangladesh",2002
-"BE","Western Europe","Belgium",2002
-"BG","Eastern Europe","Bulgaria",2002
-"BH","Middle East and North Africa","Bahrain",2002
-"BJ","Sub Saharan Africa","Benin",2008
-"BY","Eastern Europe","Belarus",2002
-"CA","North America","Canada",2002
-"CD","Sub Saharan Africa","Congo (the Democratic Republic of the)",2002
-"CI","Sub Saharan Africa","CI",2001
-"CN","East and South East Asia","China",2002
-"CO","Latin America","Colombia",2000
-"CY","Middle East and North Africa","Cyprus",2002
-"DE","Western Europe","Germany",2002
-"DK","Western Europe","Denmark",1997
-"DZ","Middle East and North Africa","Algeria",1998
-"EE","Eastern Europe","Estonia",1998
-"ES","Western Europe","Spain",2002
-"FI","Western Europe","Finland",2002
-"FR","Western Europe","France",2002
-"GB","Western Europe","United Kingdom of Great Britain and Northern Ireland (the)",2002
-"GE","Eastern Europe","Georgia",2004
-"GR","Western Europe","Greece",2002
-"ID","East and South East Asia","Indonesia",2005
-"IN","South Asia","India",2002
-"IR","South Asia","Iran (Islamic Republic of)",2002
-"IT","Western Europe","Italy",2002
-"KE","Sub Saharan Africa","Kenya",2002
-"KG","Central Asia","Kyrgyzstan",2002
-"KH","East and South East Asia","Cambodia",2000
-"LA","East and South East Asia","Lao People's Democratic Republic (the)",2003
-"LT","Eastern Europe","Lithuania",2002
-"LU","Western Europe","Luxembourg",2002
-"LV","Eastern Europe","Latvia",2002
-"LY","Middle East and North Africa","Libya",2002
-"MA","Middle East and North Africa","Morocco",2003
-"MD","Eastern Europe","Moldova (the Republic of)",2002
-"MG","Sub Saharan Africa","Madagascar",2003
-"MM","East and South East Asia","Myanmar",2002
-"MT","Western Europe","Malta",2002
-"MU","Sub Saharan Africa","Mauritius",2002
-"MX","Latin America","Mexico",2002
-"MY","East and South East Asia","Malaysia",2002
-"MZ","Sub Saharan Africa","Mozambique",2002
-"NG","Sub Saharan Africa","Nigeria",2002
-"NI","Latin America","Nicaragua",2002
-"NL","Western Europe","Netherlands (the)",1996
-"NO","Western Europe","Norway",2002
-"NP","South Asia","Nepal",2004
-"PH","East and South East Asia","Philippines (the)",2005
-"PK","South Asia","Pakistan",2002
-"PL","Eastern Europe","Poland",2002
-"PR","Caribbean","Puerto Rico",2002
-"PT","Western Europe","Portugal",1997
-"RO","Eastern Europe","Romania",2002
-"RU","Eastern Europe","Russian Federation (the)",2002
-"SA","Middle East and North Africa","Saudi Arabia",2002
-"SC","Sub Saharan Africa","Seychelles",2002
-"SI","Western Europe","Slovenia",2002
-"SL","Sub Saharan Africa","Sierra Leone",2005
-"SN","Sub Saharan Africa","Senegal",2001
-"TH","East and South East Asia","Thailand",2002
-"TJ","Central Asia","Tajikistan",2006
-"TN","Middle East and North Africa","Tunisia",2001
-"TW","East and South East Asia","Taiwan (Province of China)",2002
-"TZ","Sub Saharan Africa","Tanzania, United Republic of",2002
-"UA","Eastern Europe","Ukraine",2004
-"US","North America","United States of America (the)",2002
-"UY","Latin America","Uruguay",2002
-"UZ","Central Asia","Uzbekistan",2002
-"VN","East and South East Asia","Viet Nam",2002
-"ZA","Sub Saharan Africa","South Africa",2000
+ISO,Region,Country,Date,
+AF,South Asia,Afghanistan,2009,
+AL,Western Europe,Albania,2004,
+AM,Eastern Europe,Armenia,2005,
+AT,Western Europe,Austria,2002,
+AU,Australasia,Australia,2002,
+AZ,Eastern Europe,Azerbaijan,2006,
+BD,South Asia,Bangladesh,2002,
+BE,Western Europe,Belgium,2002,
+BG,Eastern Europe,Bulgaria,2002,
+BH,Middle East and North Africa,Bahrain,2002,
+BJ,Sub Saharan Africa,Benin,2008,
+BY,Eastern Europe,Belarus,2002,
+CA,North America,Canada,2002,
+CD,Sub Saharan Africa,Congo (the Democratic Republic of the),2002,
+CI,Sub Saharan Africa,CI,2001,
+CN,East and South East Asia,China,2002,
+CO,Latin America,Colombia,2000,
+CY,Middle East and North Africa,Cyprus,2002,
+DE,Western Europe,Germany,2002,
+DK,Western Europe,Denmark,1997,
+DZ,Middle East and North Africa,Algeria,1998,
+EE,Eastern Europe,Estonia,1998,
+ES,Western Europe,Spain,2002,
+FI,Western Europe,Finland,2002,
+FR,Western Europe,France,2002,
+GB,Western Europe,United Kingdom of Great Britain and Northern Ireland (the),2002,
+GE,Eastern Europe,Georgia,2004,
+GR,Western Europe,Greece,2002,
+ID,East and South East Asia,Indonesia,2005,
+IN,South Asia,India,2002,
+IR,South Asia,Iran (Islamic Republic of),2002,
+IT,Western Europe,Italy,2002,
+KE,Sub Saharan Africa,Kenya,2002,
+KG,Central Asia,Kyrgyzstan,2013,instead of 2002
+KH,East and South East Asia,Cambodia,2000,
+LA,East and South East Asia,Lao People's Democratic Republic (the),2003,
+LT,Eastern Europe,Lithuania,2002,
+LU,Western Europe,Luxembourg,2002,
+LV,Eastern Europe,Latvia,2002,
+LY,Middle East and North Africa,Libya,2002,
+MA,Middle East and North Africa,Morocco,2003,
+MD,Eastern Europe,Moldova (the Republic of),2002,
+MG,Sub Saharan Africa,Madagascar,2003,
+MM,East and South East Asia,Myanmar,2002,
+MT,Western Europe,Malta,2002,
+MU,Sub Saharan Africa,Mauritius,2002,
+MX,Latin America,Mexico,2002,
+MY,East and South East Asia,Malaysia,2002,
+MZ,Sub Saharan Africa,Mozambique,2002,
+NG,Sub Saharan Africa,Nigeria,2002,
+NI,Latin America,Nicaragua,2002,
+NL,Western Europe,Netherlands (the),1996,
+NO,Western Europe,Norway,2002,
+NP,South Asia,Nepal,2004,
+PH,East and South East Asia,Philippines (the),2005,
+PK,South Asia,Pakistan,2002,
+PL,Eastern Europe,Poland,2002,
+PR,Caribbean,Puerto Rico,2002,
+PT,Western Europe,Portugal,1997,
+RO,Eastern Europe,Romania,2002,
+RU,Eastern Europe,Russian Federation (the),2002,
+SA,Middle East and North Africa,Saudi Arabia,2002,
+SC,Sub Saharan Africa,Seychelles,2002,
+SI,Western Europe,Slovenia,2002,
+SL,Sub Saharan Africa,Sierra Leone,2005,
+SN,Sub Saharan Africa,Senegal,2001,
+TH,East and South East Asia,Thailand,2002,
+TJ,Central Asia,Tajikistan,2006,
+TN,Middle East and North Africa,Tunisia,2001,
+TW,East and South East Asia,Taiwan (Province of China),2002,
+TZ,Sub Saharan Africa,"Tanzania, United Republic of",2002,
+UA,Eastern Europe,Ukraine,2004,
+US,North America,United States of America (the),2002,
+UY,Latin America,Uruguay,2002,
+UZ,Central Asia,Uzbekistan,2002,
+VN,East and South East Asia,Viet Nam,2002,
+ZA,Sub Saharan Africa,South Africa,2000,

@@ -2,6 +2,10 @@ function ydot2 = Ukraine_model(t,y_tmp,params,model,scenario)
 
 mydate=2022;
 
+
+%Yearly_Pyrs_PWID2(j) = trapz(t(ind1:ind2),sum(y_out(ind1:ind2,1,:,:,:,:,:,:),2:8));
+%Yearly_Pyrs_ART(j) = trapz(t(ind1:ind2),sum(y_out(ind1:ind2,:,:,:,:,:,:,[4,6,8]),2:8));
+%Yearly_Pyrs_OST(j) = trapz(t(ind1:ind2),sum(y_out(ind1:ind2,1,:,:,:,:,[2,3],:),2:8));
 %#codegen
 %% Indexes
 %{
@@ -89,6 +93,8 @@ HIV_Incidence_NGO = 0;
 HIV_Incidence_non_NGO = 0;
 ART_initiations_NGO=0;
 
+
+
 %% Parameters
 
 if t<params.OST_start_date
@@ -111,6 +117,23 @@ if t>params.ART_end_date
     params.ART_start = 0;
 end
 
+
+% NSP edits from Antoine %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% if t<params.NSP_start_date
+%     params.NSP_start_com = 0;
+% else
+%     params.NSP_start_com =  min(t-params.NSP_start_date,params.NSP_cal_date-params.NSP_start_date)/(params.NSP_cal_date-params.NSP_start_date)*params.NSP_start_com;
+% end
+% 
+% if t>params.NSP_end_date
+%     params.NSP_start_com = 0;
+% end
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
 switch scenario
     case 0 % default scenario for calibration
     
@@ -122,10 +145,47 @@ switch scenario
         if t>=mydate
             params.ART_start = params.scale_ART_50_2030;
         end
-        
+%%%% ART and OST scenario? %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   
+    case 3
+        if t>=mydate
+            params.ART_start = params.scale_ART_50_2030;
+            params.OST_start_com = params.scale_OST_50_2030;
+        end
+%%%%  NSP only%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   
+    case 4
+        if t>=mydate
+%             params.ART_start = params.scale_ART_50_2030;
+%             params.OST_start_com = params.scale_OST_50_2030;
+        end
+%%%%  NSP ART only%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   
+    case 5
+        if t>=mydate
+             params.ART_start = params.scale_ART_50_2030;
+%             params.OST_start_com = params.scale_OST_50_2030;
+        end
+%%%%  NSP OST only%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   
+    case 6
+        if t>=mydate
+%              params.ART_start = params.scale_ART_50_2030;
+             params.OST_start_com = params.scale_OST_50_2030;
+        end
+%%%%  NSP ART and OST %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%   
+    case 7
+        if t>=mydate
+             params.ART_start = params.scale_ART_50_2030;
+             params.OST_start_com = params.scale_OST_50_2030;
+        end
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%    
 
+    
+    
+    
+    
+    
+    
     otherwise
         y = nan([2,2,2,4,3,4,8]);
+
 end
 
 params.ART_recruit_matrix = params.ART_start*params.ART_recruit_matrix;
@@ -148,6 +208,13 @@ ydot(1,:,:,:,:,[2,3],:) = ydot(1,:,:,:,:,[2,3],:) - params.RR_death_OST.*params.
 a=ydot(2,:,:,:,:,:,:) ;
 
 %params.mu_death_ex
+input1=params.mu_death_PWID;
+input1;
+input2=y(2,:,:,:,:,:,:);
+input2;
+input3=ydot(2,:,:,:,:,:,:);
+input3;
+
 % mortality among ex-PWID
 ydot(2,:,:,:,:,:,:) = ydot(2,:,:,:,:,:,:) - params.mu_death_ex*y(2,:,:,:,:,:,:);
 
@@ -274,6 +341,10 @@ ydot(:,:,:,3,:,:,:) = ydot(:,:,:,3,:,:,:) + params.prison_release.*y(:,:,:,2,:,:
 ydot(:,:,:,3,:,:,:) = ydot(:,:,:,3,:,:,:) - params.transition_post_release_risk.*y(:,:,:,3,:,:,:);
 ydot(:,:,:,4,:,:,:) = ydot(:,:,:,4,:,:,:) + params.transition_post_release_risk.*y(:,:,:,3,:,:,:);
 %%
+
+NSP_prison=1;
+
+
 switch model
     case {'Initialisation'}
 
@@ -375,7 +446,36 @@ switch model
  elseif t>2017
      propARTGenPop=0.5;
  end
+ %%%new 6/8/22
+
+ PWID_prop_NSP_com.time_pt =params.NSP_cal_date ;%2015;
+ PWID_prop_NSP_com.estimate= params.NSP_cal_Est; % 0.394;
+ 
+ if t<params.NSP_start_date
+     propNSP=0;
      
+ elseif t>=params.NSP_start_date && t< PWID_prop_NSP_com.time_pt 
+     propNSP=((t-params.NSP_start_date)/(PWID_prop_NSP_com.time_pt -params.NSP_start_date))*PWID_prop_NSP_com.estimate ;
+ elseif t>=PWID_prop_NSP_com.time_pt && t< 2022
+     propNSP=PWID_prop_NSP_com.estimate ;
+  elseif t>=2022
+      if scenario==4
+        propNSP=1 ;
+      elseif scenario==5
+        propNSP=1 ;
+      elseif scenario==6
+        propNSP=1 ;
+      elseif scenario==7
+        propNSP=1 ;
+      else
+         propNSP=PWID_prop_NSP_com.estimate ;
+      end
+ end
+ 
+% relative risk of hiv transmission through idu if on NSP
+
+%%% 
+
         Prev_f1_external = reshape(mixing_matrix_f(1,1,:,:,:,:,:).*hiv_prev_young_f.*(1-propARTGenPop),[1*1*2*4*3*4*8,1]); %Column vector. Represents the proportional sexual activity levels of HIV+ female subgroups, also includes relative transmissibility of HIV stages on/off ART. Consists of mixing_matrix_f and params.weighted_prev, multiplied and re-shaped into column vector. 
         Prev_m1_external = reshape(params.Male_FOT_term2.*y(1,1,:,:,:,:,:).*hiv_prev_young_m.*(1-propARTGenPop),[1*1*2*4*3*4*8,1]); %Column vector containing number of sexual contacts of each male PWID HIV+ group (absolute, not per PWID), adjusted by transmissibility modifiers. Consists of params.Male_FOT_term2, params.weighted_prev, and the state vector, multiplied element-wise and reshaped into a column vector.
        
@@ -391,15 +491,15 @@ switch model
         
        
         %% HIV force of infection through Injecting transmission
-        
-        HIV_inj_params.lambda_com = params.lambda_HIV_inj*sum(sum(sum(sum(sum(sum(sum(sum(sum(params.HIV_inj_matrix_num(:,:,:,[1,3,4],:,:,:).*y(:,:,:,[1,3,4],:,:,:))))))))))./...
+        %%edited 6/8/22 changed on 06/09 to get the proper prop NSP
+        HIV_inj_params.lambda_com = (1-(propNSP*(1-params.RR_HIV_NSP)))*params.lambda_HIV_inj*sum(sum(sum(sum(sum(sum(sum(sum(sum(params.HIV_inj_matrix_num(:,:,:,[1,3,4],:,:,:).*y(:,:,:,[1,3,4],:,:,:))))))))))./...
             sum(sum(sum(sum(sum(sum(sum(sum(sum(params.HIV_inj_matrix_denom(:,:,:,[1,3,4],:,:,:).*y(:,:,:,[1,3,4],:,:,:))))))))));
-        HIV_inj_params.lambda_pris = params.lambda_HIV_inj*sum(sum(sum(sum(sum(sum(sum(sum(sum(params.HIV_inj_matrix_num(:,:,:,2,:,:,:).*y(:,:,:,2,:,:,:))))))))))./...
+        HIV_inj_params.lambda_pris = (1-(NSP_prison*propNSP*(1-params.RR_HIV_NSP)))*params.lambda_HIV_inj*sum(sum(sum(sum(sum(sum(sum(sum(sum(params.HIV_inj_matrix_num(:,:,:,2,:,:,:).*y(:,:,:,2,:,:,:))))))))))./...
             sum(sum(sum(sum(sum(sum(sum(sum(sum(params.HIV_inj_matrix_denom(:,:,:,2,:,:,:).*y(:,:,:,2,:,:,:))))))))));
         
-        HIV_inj_params.lambda_com_young = params.lambda_HIV_inj*sum(sum(sum(sum(sum(sum(sum(sum(sum(params.HIV_inj_matrix_num(:,:,1,[1,3,4],:,:,:).*y(:,:,1,[1,3,4],:,:,:))))))))))./...
+        HIV_inj_params.lambda_com_young = (1-(propNSP*(1-params.RR_HIV_NSP)))*params.lambda_HIV_inj*sum(sum(sum(sum(sum(sum(sum(sum(sum(params.HIV_inj_matrix_num(:,:,1,[1,3,4],:,:,:).*y(:,:,1,[1,3,4],:,:,:))))))))))./...
             sum(sum(sum(sum(sum(sum(sum(sum(sum(params.HIV_inj_matrix_denom(:,:,1,[1,3,4],:,:,:).*y(:,:,1,[1,3,4],:,:,:))))))))));
-        HIV_inj_params.lambda_com_old = params.lambda_HIV_inj*sum(sum(sum(sum(sum(sum(sum(sum(sum(params.HIV_inj_matrix_num(:,:,2,[1,3,4],:,:,:).*y(:,:,2,[1,3,4],:,:,:))))))))))./...
+        HIV_inj_params.lambda_com_old = (1-(propNSP*(1-params.RR_HIV_NSP)))*params.lambda_HIV_inj*sum(sum(sum(sum(sum(sum(sum(sum(sum(params.HIV_inj_matrix_num(:,:,2,[1,3,4],:,:,:).*y(:,:,2,[1,3,4],:,:,:))))))))))./...
             sum(sum(sum(sum(sum(sum(sum(sum(sum(params.HIV_inj_matrix_denom(:,:,2,[1,3,4],:,:,:).*y(:,:,2,[1,3,4],:,:,:))))))))));
         
         

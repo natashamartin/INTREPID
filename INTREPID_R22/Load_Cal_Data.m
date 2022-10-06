@@ -243,7 +243,6 @@ Data.(char(data_field)).lower = Cal_data_temp.LI(ind)*100;
 Data.(char(data_field)).upper = Cal_data_temp.UI(ind)*100;
 
 
-
 % %% current ART
 % Overall
 data_field = 'PWID_prop_current_ART_com';
@@ -256,6 +255,29 @@ Data.(char(data_field)).time_pt = Cal_data_temp.Date(ind);
 Data.(char(data_field)).estimate = Cal_data_temp.Est(ind)*100;
 Data.(char(data_field)).lower = Cal_data_temp.LI(ind)*100;
 Data.(char(data_field)).upper = Cal_data_temp.UI(ind)*100;
+
+% NSP
+% filename = 'Data_Files/Calibration_Data/PWID_prop_current_NSP_com_data.csv';
+% opts = detectImportOptions(Filename);
+% opts = setvartype(opts,{'Est','LI','UI'},'double');
+% dataTable = readtable(filename,opts);
+% ind = strcmp(dataTable.ISO, ISO);
+% data = dataTable(strcmp(dataTable.ISO,ISO),:);
+% PWID_prop_NSP_com.time_pt = data.Date;
+% PWID_prop_NSP_com.estimate = data.Est;
+
+
+data_field = 'PWID_prop_current_NSP_com';
+Filename = ['Data_Files/Calibration_Data/',data_field,'_data.csv'];
+opts = detectImportOptions(Filename);
+opts = setvartype(opts,{'Est','LI','UI'},'double');
+Cal_data_temp = readtable(Filename,opts);
+ind = strcmp(Cal_data_temp.ISO, ISO);
+Data.(char(data_field)).time_pt = Cal_data_temp.Date(ind);
+Data.(char(data_field)).estimate = Cal_data_temp.Est(ind)*1;
+Data.(char(data_field)).lower = Cal_data_temp.LI(ind)*1;
+Data.(char(data_field)).upper = Cal_data_temp.UI(ind)*1;
+
 
 
 %%Proportion HIV sexual transmission 

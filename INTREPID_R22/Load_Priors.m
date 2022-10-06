@@ -16,6 +16,9 @@ priors.RR_inject_female = makedist('triangular',1.079659*1.3164,1.25219*1.542618
 % relative risk of hiv transmission through idu if on OST
 priors.RR_HIV_OST = make_lognormal_dist([0.46,0.32,0.67]);
 
+% relative risk of hiv transmission through idu if on NSP
+priors.RR_HIV_NSP = make_lognormal_dist([0.66,0.43,1.01]);
+
 %% To Update
 
 % rate of loss to care from ART
@@ -177,7 +180,16 @@ ci_up = max(data.UI);
 priors.PWID_initial_pop_size = makedist('uniform', ci_low, 1.5*ci_up);
 
 % seeds
-priors.HIV_seed = makedist('uniform',0.001/100,5/100);
+
+
+if ISO=='BY'
+    priors.HIV_seed = makedist('uniform',0.0001,0.0005);
+else
+    priors.HIV_seed = makedist('uniform',0.001/100,5/100);
+end
+
+    
+
 priors.assortative = makedist('uniform',0,0.5);
 %% Save priors
 

@@ -1,9 +1,9 @@
-Region,Country,ISO,Est,LI,UI,Date,
+Region,Country,ISO,Est,LI,UI,Date,Notes
 South Asia,Afghanistan,AF,2.5,1,4,2020,
 Western Europe,Albania,AL,10.7,5,22,2020,
 Middle East and North Africa,Algeria,DZ,10,3,14,2020,
-Eastern Europe,Armenia,AM,8.7,2,20,2020,
-Australasia,Australia,AU,15.4,8,22,2020,
+Eastern Europe,Armenia,AM,8.7,2,20,2020,x
+Australasia,Australia,AU,15.4,8,22,2020,x
 Western Europe,Austria,AT,13,13,13,2020,
 Eastern Europe,Azerbaijan,AZ,8.8,5,12,2020,
 Middle East and North Africa,Bahrain,BH,10,3,14,2020,
@@ -18,7 +18,7 @@ East and South East Asia,China,CN,7.1,1.5,25,2020,
 Latin America,Colombia,CO,3,3,3,2020,
 Sub Saharan Africa,CI,CI,4.6,3,17,2020,
 Middle East and North Africa,Cyprus,CY,8.8,7,9,2020,
-Sub Saharan Africa,Democratic Republic of the Congo,CD,4.6,3,17,2020,
+Sub Saharan Africa,Democratic Republic of the Congo,CD,4.6,3,17,2020,x
 Western Europe,Denmark,DK,18.2,18,19,2020,
 Eastern Europe,Estonia,EE,8.1,5,11,2020,
 Western Europe,Finland,FI,10.7,5,22,2020,
@@ -35,7 +35,7 @@ Central Asia,Kyrgyzstan,KG,16.8,11.2,23.7,2020,new from lancet before 6.3 [5-7] 
 East and South East Asia,Lao People's Democratic Republic,LA,7.4,1,25,2020,
 Eastern Europe,Latvia,LV,9.1,8,10,2020,
 Middle East and North Africa,Libyan Arab Jamahiriya,LY,10,3,14,2020,
-Eastern Europe,Lithuania,LT,10,10,10,2020,
+Eastern Europe,Lithuania,LT,10,10,10,2020,x
 Western Europe,Luxembourg,LU,10.7,5,22,2020,
 Sub Saharan Africa,Madagascar,MG,4.6,3,17,2020,
 East and South East Asia,Malaysia,MY,13.9,13,15,2020,
@@ -51,12 +51,12 @@ Western Europe,Netherlands,NL,10.7,5,22,2020,
 Latin America,Nicaragua,NI,6,6,6,2020,
 Sub Saharan Africa,Nigeria,NG,8,8,8,2020,
 Western Europe,Norway,NO,14,14,14,2020,
-South Asia,Pakistan,PK,5.1,5,8,2020,
-East and South East Asia,Philippines,PH,6.8,3,11,2020,
+South Asia,Pakistan,PK,5.1,5,8,2020,x
+East and South East Asia,Philippines,PH,6.8,3,11,2020,x
 Eastern Europe,Poland,PL,14.4,13,16,2020,
 Western Europe,Portugal,PT,10.7,5,22,2020,
 Caribbean,Puerto Rico,PR,12.9,10,17,2020,
-Eastern Europe,Romania,RO,9.8,8.1,11,2020,
+Eastern Europe,Romania,RO,9.8,8.1,11,2020,x
 Eastern Europe,Russian Federation,RU,7.6,2,10,2020,
 Middle East and North Africa,Saudi Arabia,SA,10,3,14,2020,
 Sub Saharan Africa,Senegal,SN,4.6,3,17,2020,
