@@ -1,17 +1,28 @@
-function params2 = Get_Parameters(x,ISO,model)
+function params2 = Get_Parameters(x,ISO,HCV_params,model)
 filename = ['priors_',ISO,'.mat'];
 load(filename);
 params = priors;
-fields = fieldnames(params);
+fields = fieldnames(params); % 67 dimensions
 for k = 1:numel(fields)
     params.(char(fields(k))) = x(:,k);
+end
+
+load('HCV_priors.mat') %% MAY WANT TO MAKE IT ISO SPECIFIC LIKE ABOVE
+fields = fieldnames(HCV_priors);
+for k=1:numel(fields)
+    params2.(char(fields(k))) = HCV_params(:,k);
 end
 
 filename = [ISO,'_Data.mat'];
 Cal_Data = load(filename);
 
+%%%% EDITS FROM ANTOINE %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+params2.RR_HIV_NSP = params.RR_HIV_NSP ;
+params2.RR_HCV_NSP = params.RR_HCV_NSP ; %%% new from Load_priors.m
+
 
 params.RR_inject_young = 1;
+% params2.NGO_start = params.NGO_start;
 params2.homeless_start = params.homeless_start;
 params2.OST_start_com = params.OST_start_com;
 params2.ART_start = params.ART_start ;
@@ -22,29 +33,36 @@ params2.RR_death_OST_leave = params.RR_death_OST_leave ;
 params2.RR_death_OST_start = params.RR_death_OST_start ;
 params2.OST_leave1 = params.OST_leave1 ;
 params2.OST_leave2 = params.OST_leave2 ;
-params2.homeless_leave =1;
+% params2.NGO_leave = params.NGO_leave ;
+params2.homeless_leave = 1;
 params2.lambda_HIV_inj = params.lambda_HIV_inj ;
 params2.RR_HIVprog_ART = params.RR_HIVprog_ART ;
+params2.lambda_HCV_inj = params.lambda_HCV_inj;
+params2.alpha_HIV_neg = params.alpha_HIV_neg ; %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 params2.HIV_seed=params.HIV_seed;
 params2.assortative = params.assortative; 
-
+%% Params to be fixed
 
 params2.seed_date = Get_seed_date(ISO);
 params2.OST_retain_inc = 0;
 params2.transition_post_release_risk = 12/12;
+% params2.transition_NGO_duration = 1/2;
 [params2.prop_new_PWID_young,~,params.age_initiation_old_LI] = Age_calculator(ISO);
 
 %% ART and OST start dates and prison availability
 [params2.ART_start_date, params2.OST_start_date, params2.NSP_start_date] = Get_start_dates(ISO);
-[params2.ART_end_date, params2.OST_end_date, params2.NSP_start_date] = Get_end_dates(ISO);
+[params2.ART_end_date, params2.OST_end_date, params2.NSP_end_date] = Get_end_dates(ISO);
 [params2.ART_prison, params2.OST_prison, params2.NSP_prison] = Get_ART_HR_prison(ISO);
 
 params2.OST_cal_date = Cal_Data.Data.PWID_prop_current_OST_com.time_pt(end);
 params2.ART_cal_date = Cal_Data.Data.PWID_prop_current_ART_com.time_pt(end);
 
+%%%%%%%%%%%%%%%% EDITS FROM ANTOINE  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+params2.NSP_cal_date = Cal_Data.Data.PWID_prop_current_NSP_com.time_pt;
+params2.NSP_cal_Est = Cal_Data.Data.PWID_prop_current_NSP_com.estimate;
+
 %% Apply ratio of female to male HIV transmission rate
 params.HIV_sex_transmission_f = params.HIV_sex_transmission_fm*params.HIV_sex_transmission_m;
-
 %% Convert durations to rates.
 params2.prison_release = 12/params.average_prison_length_months;
 params.delta_acute = params.transmissabilitty_acute/params.transmissabilitty_chronic;
@@ -56,6 +74,16 @@ params2.tau_AIDS = 12./params.average_months_until_death_from_AIDS;
 params2.mu_cess = 1./params.average_dur_inj;
 
 
+%%%%%%%%% ANTOINE:DO WE NEED THIS - ABSENT IN THE HIV MODEL %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Spontaneous clearance among HIV positives
+alpha_HIV_pos_OR = params.alpha_HIV_pos_OR;
+alpha_HIV_neg = params.alpha_HIV_neg;
+odds_alpha_HIV_neg = alpha_HIV_neg./(1-alpha_HIV_neg);
+odds_alpha_HIV_pos = alpha_HIV_pos_OR.*odds_alpha_HIV_neg;
+params2.alpha_HIV_pos = odds_alpha_HIV_pos./(1+odds_alpha_HIV_pos);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 %% calculate proportions going into each group 
 % assume no new pwid start recently incarcerated - for simplicity
 params.prop_new_PWID_cur_inc = 0;
@@ -63,19 +91,19 @@ params.prop_new_PWID_rec_inc = 0;
 params.prop_new_PWID_nonrec_inc = 1-params.prop_new_PWID_never_inc;
 
 % generate array of proportions of entrants going into each group
-entrants_matrix = ones(2,2,2,4,3,4,8);
+entrants_matrix = ones(2,2,2,4,3,4,8,3,7);
 
 % No new ex-PWID - index 1
-entrants_matrix(2,:,:,:,:,:,:) = 0*entrants_matrix(2,:,:,:,:,:,:);
+entrants_matrix(2,:,:,:,:,:,:,:,:) = 0*entrants_matrix(2,:,:,:,:,:,:,:,:);
 
 % assign proportion start by each gender - index 2
-entrants_matrix(:,1,:,:,:,:,:) = params.prop_new_PWID_male*entrants_matrix(:,1,:,:,:,:,:);
-entrants_matrix(:,2,:,:,:,:,:) = (1-params.prop_new_PWID_male)*entrants_matrix(:,2,:,:,:,:,:);
+entrants_matrix(:,1,:,:,:,:,:,:,:) = params.prop_new_PWID_male*entrants_matrix(:,1,:,:,:,:,:,:,:);
+entrants_matrix(:,2,:,:,:,:,:,:,:) = (1-params.prop_new_PWID_male)*entrants_matrix(:,2,:,:,:,:,:,:,:);
 
 % assign proportion start by each age_group - index 3
 
-entrants_matrix(:,:,1,:,:,:,:) = params2.prop_new_PWID_young*entrants_matrix(:,:,1,:,:,:,:);
-entrants_matrix(:,:,2,:,:,:,:) = (1-params2.prop_new_PWID_young)*entrants_matrix(:,:,2,:,:,:,:);
+entrants_matrix(:,:,1,:,:,:,:,:,:) = params2.prop_new_PWID_young*entrants_matrix(:,:,1,:,:,:,:,:,:);
+entrants_matrix(:,:,2,:,:,:,:,:,:) = (1-params2.prop_new_PWID_young)*entrants_matrix(:,:,2,:,:,:,:,:,:);
 
 % assign proportion start by each incarceration_group - index 4;
 entrants_matrix(:,:,:,1,:,:,:,:,:) = params.prop_new_PWID_never_inc*entrants_matrix(:,:,:,1,:,:,:,:,:);
@@ -83,21 +111,28 @@ entrants_matrix(:,:,:,2,:,:,:,:,:) = params.prop_new_PWID_cur_inc*entrants_matri
 entrants_matrix(:,:,:,3,:,:,:,:,:) = params.prop_new_PWID_rec_inc*entrants_matrix(:,:,:,3,:,:,:,:,:);
 entrants_matrix(:,:,:,4,:,:,:,:,:) = params.prop_new_PWID_nonrec_inc*entrants_matrix(:,:,:,4,:,:,:,:,:);
 
+% no new PWID have ever been an NGO client - index 5
+% entrants_matrix(:,:,:,:,2:3,:,:,:,:) = 0;
+
 % assign proportion start by homeless status - index 5
-entrants_matrix(:,:,:,:,1,:,:) = (1-params.prop_new_PWID_homeless)*entrants_matrix(:,:,:,:,1,:,:);
-entrants_matrix(:,:,:,:,2,:,:) = params.prop_new_PWID_homeless*entrants_matrix(:,:,:,:,2,:,:);
-entrants_matrix(:,:,:,:,3,:,:) = 0;
+entrants_matrix(:,:,:,:,1,:,:,:,:) = (1-params.prop_new_PWID_homeless)*entrants_matrix(:,:,:,:,1,:,:,:,:);
+entrants_matrix(:,:,:,:,2,:,:,:,:) = params.prop_new_PWID_homeless*entrants_matrix(:,:,:,:,2,:,:,:,:);
+entrants_matrix(:,:,:,:,3,:,:,:,:) = 0;
 
 % no new PWID have ever been on OST - index 6
-entrants_matrix(:,:,:,:,:,2:4,:) = 0;
+entrants_matrix(:,:,:,:,:,2:4,:,:,:) = 0;
 
 % new PWID infected with HIV - index 7
-% 
+% will be assigned in Ukraine_model
 params2.prop_new_PWID_hiv_young_m = params.prop_new_PWID_hiv_young_m;
 params2.prop_new_PWID_hiv_old_m = params.prop_new_PWID_hiv_old_m;
 params2.prop_new_PWID_hiv_young_f = params.prop_new_PWID_hiv_young_f;
 params2.prop_new_PWID_hiv_old_f = params.prop_new_PWID_hiv_old_f;
+% entrants_matrix(:,:,:,:,:,:,2:8,:,:) = 0;
 
+% no new PWID infected with HCV - index 8/9
+entrants_matrix(:,:,:,:,:,:,:,2:3,:) = 0;
+entrants_matrix(:,:,:,:,:,:,:,:,2:7) = 0;
 
 params2.entrants_matrix = entrants_matrix;
 %% calculate ageing rates
@@ -110,81 +145,87 @@ end
 %% % Inc_matrix - array of incarceration rates for each group;
 
 % incarceration rates depend upon gender (index 2), age (index 3),
-% incarceration status (index 4), homelessness status (index 5), OST status (index
+% incarceration status (index 4), NGO status (index 5), OST status (index
 % 6)
-Inc_matrix = ones(2,2,2,4,3,4,8);
+Inc_matrix = ones(2,2,2,4,3,4,8,3,7);
 
 % dont have incarceration of ex-PWID or those in prison
-Inc_matrix(2,:,:,:,:,:,:) = 0;
-Inc_matrix(:,:,:,2,:,:,:) = 0;
+Inc_matrix(2,:,:,:,:,:,:,:,:) = 0;
+Inc_matrix(:,:,:,2,:,:,:,:,:) = 0;
 
-% primary incarceration rate for PWID not homeless
+% primary incarceration rate for PWID not in contact with NGo
 % and off OST
 Inc_matrix(1,:,:,1,:,:,:,:,:) = params.inc_rate; 
 
-% re-incarceration rate for PWID not homeless
+% re-incarceration rate for PWID not in contact with NGo
 % and off OST
 Inc_matrix(1,:,:,[3,4],:,:,:,:,:) = params.reinc_rate;
 
+% relative risk of (re-/)incarceration if in contact with NGO
+% Inc_matrix(:,:,:,:,2:3,:,:,:,:) = params.RR_inc_NGO.*Inc_matrix(:,:,:,:,2:3,:,:,:,:);
 
 % relative risk of (re-/)incarceration if on OST
-Inc_matrix(:,:,:,:,:,2,:) = params.RR_inc_OST.*Inc_matrix(:,:,:,:,:,2,:);
-Inc_matrix(:,:,:,:,:,3,:) = params.RR_inc_OST.*Inc_matrix(:,:,:,:,:,3,:);
+Inc_matrix(:,:,:,:,:,2,:,:,:) = params.RR_inc_OST.*Inc_matrix(:,:,:,:,:,2,:,:,:);
+Inc_matrix(:,:,:,:,:,3,:,:,:) = params.RR_inc_OST.*Inc_matrix(:,:,:,:,:,3,:,:,:);
 
 params2.Inc_matrix = Inc_matrix;
 %% homeless_start_matrix = matrix of rates of becoming homeless
-homeless_start_matrix = params.homeless_start*ones(2,2,2,4,3,4,8);
-% zero for ex-pwid, those already homeless, or those in prison
-homeless_start_matrix(2,:,:,:,:,:,:) = 0;
-homeless_start_matrix(:,:,:,:,2:3,:,:) = 0;
-homeless_start_matrix(:,:,:,2,:,:,:) = 0;
+homeless_start_matrix = params.homeless_start*ones(2,2,2,4,3,4,8,3,7);
+% zero for ex-pwid, those already in contact, or those in prison
+homeless_start_matrix(2,:,:,:,:,:,:,:,:) = 0;
+homeless_start_matrix(:,:,:,:,2:3,:,:,:,:) = 0;
+homeless_start_matrix(:,:,:,2,:,:,:,:,:) = 0;
 
 params2.homeless_start_matrix = homeless_start_matrix;
+
 %% ART_recruit_matrix = matrix of ART recruitment rates
-ART_recruit_matrix = ones(2,2,2,4,3,4,8);
+ART_recruit_matrix = ones(2,2,2,4,3,4,8,3,7);
 % zero for those on ART, those susceptible or with acute infection
-ART_recruit_matrix(:,:,:,:,:,:,[1,2,4,6,8]) = 0;
-ART_recruit_matrix(1,:,1,:,:,:,:) = params.RR_ART_rec_young*ART_recruit_matrix(1,:,1,:,:,:,:);
-ART_recruit_matrix(1,:,:,:,:,[2,3],:) = params.RR_ART_rec_OST*ART_recruit_matrix(1,:,:,:,:,[2,3],:);
+ART_recruit_matrix(:,:,:,:,:,:,[1,2,4,6,8],:,:) = 0;
+ART_recruit_matrix(1,:,1,:,:,:,:,:,:) = params.RR_ART_rec_young*ART_recruit_matrix(1,:,1,:,:,:,:,:,:);
+% ART_recruit_matrix(1,:,:,:,[2,3],:,:,:,:) = params.RR_ART_rec_NGO*ART_recruit_matrix(1,:,:,:,[2,3],:,:,:,:);
+ART_recruit_matrix(1,:,:,:,:,[2,3],:,:,:) = params.RR_ART_rec_OST*ART_recruit_matrix(1,:,:,:,:,[2,3],:,:,:);
 % assume ex-pwid have same recruitment rate as PWID on OST 
-ART_recruit_matrix(2,:,:,:,:,:,:) = params.RR_ART_rec_OST*ART_recruit_matrix(2,:,:,:,:,:,:);
+% clients
+% ART_recruit_matrix(2,:,:,:,:,:,:,:,:) = params.RR_ART_rec_OST*params.RR_ART_rec_NGO*ART_recruit_matrix(2,:,:,:,:,:,:,:,:);
+ART_recruit_matrix(2,:,:,:,:,:,:,:,:) = params.RR_ART_rec_OST*ART_recruit_matrix(2,:,:,:,:,:,:,:,:);
 params2.ART_recruit_matrix = ART_recruit_matrix;
 
 %% ART_leave_matrix = matrix of ART leaving rates
-ART_leave_matrix = ones(2,2,2,4,3,4,8);
+ART_leave_matrix = ones(2,2,2,4,3,4,8,3,7);
 % zero for those off ART, those susceptible or with acute infection
-ART_leave_matrix(:,:,:,:,:,:,[1,2,3,5,7]) = 0;
-ART_leave_matrix(1,:,:,:,:,[2,3],:) = params.RR_ART_leave_OST*ART_leave_matrix(1,:,:,:,:,[2,3],:);
+ART_leave_matrix(:,:,:,:,:,:,[1,2,3,5,7],:,:) = 0;
+ART_leave_matrix(1,:,:,:,:,[2,3],:,:,:) = params.RR_ART_leave_OST*ART_leave_matrix(1,:,:,:,:,[2,3],:,:,:);
 % assume ex-pwid have same rate as PWID on OST
-ART_leave_matrix(2,:,:,:,:,:,:) = params.RR_ART_leave_OST*ART_leave_matrix(2,:,:,:,:,:,:);
+ART_leave_matrix(2,:,:,:,:,:,:,:,:) = params.RR_ART_leave_OST*ART_leave_matrix(2,:,:,:,:,:,:,:,:);
 ART_leave_matrix = params.ART_leave*ART_leave_matrix;
 params2.ART_leave_matrix = ART_leave_matrix;
-%% Prop_sex_active_matrix = matrix of proportions who are sexually active
 
-Prop_sex_active_matrix = ones(2,2,2,4,3,4,8);
+
+Prop_sex_active_matrix = ones(2,2,2,4,3,4,8,3,7);
 Prop_sex_active_matrix = params.Baseline_prop_sex_active*Prop_sex_active_matrix;
-Prop_sex_active_matrix(2,:,:,:,:,:,:) = 0; % 0 for ex-pwid
-Prop_sex_active_matrix(:,:,:,2,:,:,:) = 0; % 0 for prisoners
-Prop_sex_active_matrix(:,2,:,:,:,:,:) = params.RR_sex_active_female*Prop_sex_active_matrix(:,2,:,:,:,:,:);
-Prop_sex_active_matrix(:,:,2,:,:,:,:) = params.RR_sex_active_old*Prop_sex_active_matrix(:,:,2,:,:,:,:);
+Prop_sex_active_matrix(2,:,:,:,:,:,:,:,:) = 0; % 0 for ex-pwid
+Prop_sex_active_matrix(:,:,:,2,:,:,:,:,:) = 0; % 0 for prisoners
+Prop_sex_active_matrix(:,2,:,:,:,:,:,:,:) = params.RR_sex_active_female*Prop_sex_active_matrix(:,2,:,:,:,:,:,:,:);
+Prop_sex_active_matrix(:,:,2,:,:,:,:,:,:) = params.RR_sex_active_old*Prop_sex_active_matrix(:,:,2,:,:,:,:,:,:);
 
 % Prop_sex_active_matrix = Odds_sex_active_matrix./(1+Odds_sex_active_matrix);
 params.Prop_sex_active_matrix = Prop_sex_active_matrix;
 %% Number_Contacts_matrix = Matrix of cotacts each sexually active PWID ha
-Number_Contacts_matrix = ones(2,2,2,4,3,4,8)*params.contacts*365/90;
-Number_Contacts_matrix(2,:,:,:,:,:,:) = 0; % 0 for ex-pwid
-Number_Contacts_matrix(:,:,:,2,:,:,:) = 0; % 0 for prisoners
-Number_Contacts_matrix(:,:,2,:,:,:,:) = params.IRR_contacts_old*Number_Contacts_matrix(:,:,2,:,:,:,:);
+Number_Contacts_matrix = ones(2,2,2,4,3,4,8,3,7)*params.contacts*365/90;
+Number_Contacts_matrix(2,:,:,:,:,:,:,:,:) = 0; % 0 for ex-pwid
+Number_Contacts_matrix(:,:,:,2,:,:,:,:,:) = 0; % 0 for prisoners
+Number_Contacts_matrix(:,:,2,:,:,:,:,:,:) = params.IRR_contacts_old*Number_Contacts_matrix(:,:,2,:,:,:,:,:,:);
 
 params.Number_Contacts_matrix = Number_Contacts_matrix;
 
 %% Condom_use_matrix = matrix of condom use probabilities
 
-Prop_condom_matrix = ones(2,2,2,4,3,4,8);
+Prop_condom_matrix = ones(2,2,2,4,3,4,8,3,7);
 Prop_condom_matrix = params.Baseline_prop_condom*Prop_condom_matrix;
-Prop_condom_matrix(2,:,:,:,:,:,:) = 0; % 0 for ex-pwid
-Prop_condom_matrix(:,:,:,2,:,:,:) = 0; % 0 for prisoners
-Prop_condom_matrix(:,:,:,:,2:3,:,:) = params.RR_condom_homeless*Prop_condom_matrix(:,:,:,:,2:3,:,:);
+Prop_condom_matrix(2,:,:,:,:,:,:,:,:) = 0; % 0 for ex-pwid
+Prop_condom_matrix(:,:,:,2,:,:,:,:,:) = 0; % 0 for prisoners
+Prop_condom_matrix(:,:,:,:,2:3,:,:,:,:) = params.RR_condom_homeless*Prop_condom_matrix(:,:,:,:,2:3,:,:,:,:);
 
 % Condom_use_matrix = Odds_condom_matrix./(1+Odds_condom_matrix);
 params.Condom_use_matrix = Prop_condom_matrix;
@@ -212,43 +253,49 @@ params.delta_ART_inj_off_OST = prop_VS_off_OST.*delta_ART_VS + (1-prop_VS_off_OS
 params.delta_ART_inj_OST = prop_VS_OST.*delta_ART_VS + (1-prop_VS_OST).*delta_ART_non_VS;
 
   % create matrix of risk for denominator for injecting FOI
-        HIV_inj_matrix_denom = ones(2,2,2,4,3,4,8);
+        HIV_inj_matrix_denom = ones(2,2,2,4,3,4,8,3,7);
         % EX-pwid have 0 risk
-        HIV_inj_matrix_denom(2,:,:,:,:,:,:)=0;
+        HIV_inj_matrix_denom(2,:,:,:,:,:,:,:,:)=0;
         % different risk for females in community
-        HIV_inj_matrix_denom(1,2,:,[1,3,4],:,:,:)=params.RR_inject_female*HIV_inj_matrix_denom(1,2,:,[1,3,4],:,:,:);
+        HIV_inj_matrix_denom(1,2,:,[1,3,4],:,:,:,:,:)=params.RR_inject_female*HIV_inj_matrix_denom(1,2,:,[1,3,4],:,:,:,:,:);
         % different risk for younger PWID in community
-        HIV_inj_matrix_denom(1,:,1,[1,3,4],:,:,:)=params.RR_inject_young*HIV_inj_matrix_denom(1,:,1,[1,3,4],:,:,:);
+        HIV_inj_matrix_denom(1,:,1,[1,3,4],:,:,:,:,:)=params.RR_inject_young*HIV_inj_matrix_denom(1,:,1,[1,3,4],:,:,:,:,:);
         % different risk for incarceration states
-        HIV_inj_matrix_denom(1,:,:,2,:,:,:)=params.RR_inject_prison*HIV_inj_matrix_denom(1,:,:,2,:,:,:);
-        HIV_inj_matrix_denom(1,:,:,3,:,:,:)=params.RR_inject_post_release*HIV_inj_matrix_denom(1,:,:,3,:,:,:);
-        HIV_inj_matrix_denom(1,:,:,4,:,:,:)=params.RR_inject_ever_inc*HIV_inj_matrix_denom(1,:,:,4,:,:,:);
+        HIV_inj_matrix_denom(1,:,:,2,:,:,:,:,:)=params.RR_inject_prison*HIV_inj_matrix_denom(1,:,:,2,:,:,:,:,:);
+        HIV_inj_matrix_denom(1,:,:,3,:,:,:,:,:)=params.RR_inject_post_release*HIV_inj_matrix_denom(1,:,:,3,:,:,:,:,:);
+        HIV_inj_matrix_denom(1,:,:,4,:,:,:,:,:)=params.RR_inject_ever_inc*HIV_inj_matrix_denom(1,:,:,4,:,:,:,:,:);
         % different risk for homeless
+        HIV_inj_matrix_denom(1,:,:,:,2,:,:,:,:)=params.RR_inject_homeless*HIV_inj_matrix_denom(1,:,:,:,2,:,:,:,:);
+        
+        %%% IN OUR HIV MODEL IT IS DIFFERENT:
         HIV_inj_matrix_denom(1,:,:,:,2:3,:,:)=params.RR_inject_homeless*HIV_inj_matrix_denom(1,:,:,:,2:3,:,:);
+
+        
+        
         % different risk for those on OST
-        HIV_inj_matrix_denom(1,:,:,:,:,2,:)=params.RR_HIV_OST*HIV_inj_matrix_denom(1,:,:,:,:,2,:);
-        HIV_inj_matrix_denom(1,:,:,:,:,3,:)=params.RR_HIV_OST*HIV_inj_matrix_denom(1,:,:,:,:,3,:);
+        HIV_inj_matrix_denom(1,:,:,:,:,2,:,:,:)=params.RR_HIV_OST*HIV_inj_matrix_denom(1,:,:,:,:,2,:,:,:);
+        HIV_inj_matrix_denom(1,:,:,:,:,3,:,:,:)=params.RR_HIV_OST*HIV_inj_matrix_denom(1,:,:,:,:,3,:,:,:);
         % those with aids not on ART not engaging in IDU
-        HIV_inj_matrix_denom(:,:,:,:,:,:,7)=0;
+        HIV_inj_matrix_denom(:,:,:,:,:,:,7,:,:)=0;
         
         % create matrix of risk & infectivity for numerator for injecting FOI
         HIV_inj_matrix_num = HIV_inj_matrix_denom;
         % different infectivity for each disease stage - susceptibles
-        HIV_inj_matrix_num(:,:,:,:,:,:,1)=0;
+        HIV_inj_matrix_num(:,:,:,:,:,:,1,:,:)=0;
         % different infectivity for each disease stage - acute
-        HIV_inj_matrix_num(:,:,:,:,:,:,2)=params.delta_acute*HIV_inj_matrix_num(:,:,:,:,:,:,2);
+        HIV_inj_matrix_num(:,:,:,:,:,:,2,:,:)=params.delta_acute*HIV_inj_matrix_num(:,:,:,:,:,:,2,:,:);
         % different infectivity for each disease stage - pre-aids and aids
-        HIV_inj_matrix_num(:,:,:,:,:,:,5:8)=params.delta_preaids*HIV_inj_matrix_num(:,:,:,:,:,:,5:8);
+        HIV_inj_matrix_num(:,:,:,:,:,:,5:8,:,:)=params.delta_preaids*HIV_inj_matrix_num(:,:,:,:,:,:,5:8,:,:);
         % effect of ART
-        HIV_inj_matrix_num(:,:,:,:,:,[1,4],[4,6,8])=params.delta_ART_inj_off_OST*HIV_inj_matrix_num(:,:,:,:,:,[1,4],[4,6,8]);
-        HIV_inj_matrix_num(:,:,:,:,:,[2,3],[4,6,8])=params.delta_ART_inj_OST*HIV_inj_matrix_num(:,:,:,:,:,[2,3],[4,6,8]);
+        HIV_inj_matrix_num(:,:,:,:,:,[1,4],[4,6,8],:,:)=params.delta_ART_inj_off_OST*HIV_inj_matrix_num(:,:,:,:,:,[1,4],[4,6,8],:,:);
+        HIV_inj_matrix_num(:,:,:,:,:,[2,3],[4,6,8],:,:)=params.delta_ART_inj_OST*HIV_inj_matrix_num(:,:,:,:,:,[2,3],[4,6,8],:,:);
         
         params2.HIV_inj_matrix_num = HIV_inj_matrix_num;
         params2.HIV_inj_matrix_denom = HIV_inj_matrix_denom;
         
         %%
-        weighted_prev = ones(2,2,2,4,3,4,8);
-        weighted_prev(:,:,:,:,:,:,1)=0;
+        weighted_prev = ones(2,2,2,4,3,4,8,3,7);
+        weighted_prev(:,:,:,:,:,:,1,:,:)=0;
         weighted_prev(:,:,:,:,:,:,2,:,:)=params.delta_acute*weighted_prev(:,:,:,:,:,:,2,:,:);
         weighted_prev(:,:,:,:,:,:,5:8,:,:)=params.delta_preaids*weighted_prev(:,:,:,:,:,:,5:8,:,:);
         weighted_prev(:,:,:,:,:,[1,4],[4,6,8],:,:)=params.delta_ART_inj_off_OST*weighted_prev(:,:,:,:,:,[1,4],[4,6,8],:,:);
@@ -258,34 +305,78 @@ params.delta_ART_inj_OST = prop_VS_OST.*delta_ART_VS + (1-prop_VS_OST).*delta_AR
         
         %%
         
-        OST_start_matrix = ones(2,2,2,4,3,4,8);
+        OST_start_matrix = ones(2,2,2,4,3,4,8,3,7);
         % zero for ex-PWID & those already on ost
-        OST_start_matrix(2,:,:,:,:,:,:) =0;
-        OST_start_matrix(:,:,:,:,:,2,:) =0;
-        OST_start_matrix(:,:,:,:,:,3,:) =0;
-        OST_start_matrix(:,:,:,2,:,:,:) = 0; % NO OSt in prison
-%     
+        OST_start_matrix(2,:,:,:,:,:,:,:,:) =0;
+        OST_start_matrix(:,:,:,:,:,2,:,:,:) =0;
+        OST_start_matrix(:,:,:,:,:,3,:,:,:) =0;
+        OST_start_matrix(:,:,:,2,:,:,:,:,:) = 0; % NO OSt in prison
+%         OST_start_matrix(:,:,:,:,1,:,:,:,:) = params.RR_OST_start_non_NGO*OST_start_matrix(:,:,:,:,1,:,:,:,:);
+        
         params2.OST_start_matrix = OST_start_matrix;
-     
+        
         %%
-       Condom_use_matrix_m1 = reshape(params.Condom_use_matrix(1,1,:,:,:,:,:),[1,1*1*2*4*3*4*8]);
-       Condom_use_matrix_f1 = reshape(params.Condom_use_matrix(1,2,:,[1,3,4],:,:,1),[1*1*2*3*3*4*1,1]);
+                % create matrix of risk for denominator for injecting FOI
+        HCV_inj_matrix_denom = ones(2,2,2,4,3,4,8,3,7);
+        % EX-pwid have 0 risk
+        HCV_inj_matrix_denom(2,:,:,:,:,:,:,:,:)=0;
+        % different risk for females in community
+        HCV_inj_matrix_denom(1,2,:,[1,3,4],:,:,:,:,:)=params.RR_inject_female*HCV_inj_matrix_denom(1,2,:,[1,3,4],:,:,:,:,:);
+        % different risk for younger PWID in community
+        HCV_inj_matrix_denom(1,:,1,[1,3,4],:,:,:,:,:)=params.RR_inject_young*HCV_inj_matrix_denom(1,:,1,[1,3,4],:,:,:,:,:);
+        % different risk for incarceration states
+        HCV_inj_matrix_denom(1,:,:,2,:,:,:,:,:)=params.RR_inject_prison*HCV_inj_matrix_denom(1,:,:,2,:,:,:,:,:);
+        HCV_inj_matrix_denom(1,:,:,3,:,:,:,:,:)=params.RR_inject_post_release*HCV_inj_matrix_denom(1,:,:,3,:,:,:,:,:);
+        HCV_inj_matrix_denom(1,:,:,4,:,:,:,:,:)=params.RR_inject_ever_inc*HCV_inj_matrix_denom(1,:,:,4,:,:,:,:,:);
+        % different risk for NGO clients
+        HCV_inj_matrix_denom(1,:,:,:,2:3,:,:,:,:)=params.RR_inject_homeless*HCV_inj_matrix_denom(1,:,:,:,2:3,:,:,:,:);
+        % different risk for those on OST
+        HCV_inj_matrix_denom(1,:,:,:,:,2,:,:,:)=params.RR_HCV_OST*HCV_inj_matrix_denom(1,:,:,:,:,2,:,:,:);
+        HCV_inj_matrix_denom(1,:,:,:,:,3,:,:,:)=params.RR_HCV_OST*HCV_inj_matrix_denom(1,:,:,:,:,3,:,:,:);
+        % those with aids not on ART not engaging in IDU
+        HCV_inj_matrix_denom(:,:,:,:,:,:,7,:,:)=0;
+        
+        % create matrix of risk & infectivity for numerator for injecting FOI
+        HCV_inj_matrix_num = HCV_inj_matrix_denom;
+        % different infectivity for each disease stage - susceptibles
+        HCV_inj_matrix_num(:,:,:,:,:,:,:,1:2,:)=0;
+        % different infectivity for HIV positives
+        HCV_inj_matrix_num(:,:,:,:,:,:,2:8,:,:)=params.RR_HCV_HIV*HCV_inj_matrix_num(:,:,:,:,:,:,2:8,:,:);
+        
+        params2.HCV_inj_matrix_denom = HCV_inj_matrix_denom;
+        params2.HCV_inj_matrix_num = HCV_inj_matrix_num;
+        %%
+       Condom_use_matrix_m1 = reshape(params.Condom_use_matrix(1,1,:,:,:,:,:,:,:),[1,1*1*2*4*3*4*8*3*7]);
+       Condom_use_matrix_f1 = reshape(params.Condom_use_matrix(1,2,:,[1,3,4],:,:,1,1,1),[1*1*2*3*3*4*1*1*1,1]);
        
-       Condom_use_matrix_m2 = reshape(params.Condom_use_matrix(1,2,:,:,:,:,:),[1,1*1*2*4*3*4*8]);
-       Condom_use_matrix_f2 = reshape(params.Condom_use_matrix(1,1,:,[1,3,4],:,:,1),[1*1*2*3*3*4*1,1]);
+       Condom_use_matrix_m2 = reshape(params.Condom_use_matrix(1,2,:,:,:,:,:,:,:),[1,1*1*2*4*3*4*8*3*7]);
+       Condom_use_matrix_f2 = reshape(params.Condom_use_matrix(1,1,:,[1,3,4],:,:,1,1,1),[1*1*2*3*3*4*1*1*1,1]);
        
        params2.Condom_fm = (1-params.condom_efficacy.*0.5*(Condom_use_matrix_f1+Condom_use_matrix_m1));
        params2.Condom_mf = (1-params.condom_efficacy.*0.5*(Condom_use_matrix_m2+Condom_use_matrix_f2));
        
-       params2.Male_FOI_term = params.Prop_sex_active_matrix(1,1,:,[1,3,4],:,:,1).*params.Number_Contacts_matrix(1,1,:,[1,3,4],:,:,1).*params.HIV_sex_transmission_m.*params.Prop_male_partners_PWID; %PWID sexual contacts
+
+   
+%        params2.Male_FOI_term = params.Prop_sex_active_matrix(1,1,:,[1,3,4],:,:,1,:,:).*params.Number_Contacts_matrix(1,1,:,[1,3,4],:,:,1,:,:).*params.HIV_sex_transmission_m.*params.Prop_male_partners_PWID;
+%        params2.Female_FOI_term1 = params.HIV_sex_transmission_f.*params.Prop_male_partners_PWID;
+%        
+%        params2.Female_FOI_term2 = Prop_sex_active_matrix(1,2,:,:,:,:,:,:,:).*params.Number_Contacts_matrix(1,2,:,:,:,:,:,:,:);
+%        
+%        params2.Male_FOT_term2 = params.Prop_sex_active_matrix(1,1,:,:,:,:,:,:,:).*params.Number_Contacts_matrix(1,1,:,:,:,:,:,:,:);
+
+       %%% from new FOI
+       params2.Male_FOI_term = params.Prop_sex_active_matrix(1,1,:,[1,3,4],:,:,1,:,:).*params.Number_Contacts_matrix(1,1,:,[1,3,4],:,:,1,:,:).*params.HIV_sex_transmission_m.*params.Prop_male_partners_PWID; %PWID sexual contacts
        params2.Female_FOI_term1 = params.HIV_sex_transmission_f.*params.Prop_male_partners_PWID; 
-       
-         params2.Male_FOI_termA = params.Prop_sex_active_matrix(1,1,:,[1,3,4],:,:,1).*params.Number_Contacts_matrix(1,1,:,[1,3,4],:,:,1).*params.HIV_sex_transmission_m.*(1-params.Prop_male_partners_PWID); %nonPWID sexual contacts
+
+  
+         params2.Male_FOI_termA = params.Prop_sex_active_matrix(1,1,:,[1,3,4],:,:,1,:,:).*params.Number_Contacts_matrix(1,1,:,[1,3,4],:,:,1,:,:).*params.HIV_sex_transmission_m.*(1-params.Prop_male_partners_PWID); %nonPWID sexual contacts
         params2.Female_FOI_term1A = params.HIV_sex_transmission_f.*(1-params.Prop_male_partners_PWID); %nonPWID sex
        
-       params2.Female_FOI_term2 = Prop_sex_active_matrix(1,2,:,:,:,:,:).*params.Number_Contacts_matrix(1,2,:,:,:,:,:); %
+       params2.Female_FOI_term2 = Prop_sex_active_matrix(1,2,:,:,:,:,:,:,:).*params.Number_Contacts_matrix(1,2,:,:,:,:,:,:,:); %
        
-       params2.Male_FOT_term2 = params.Prop_sex_active_matrix(1,1,:,:,:,:,:).*params.Number_Contacts_matrix(1,1,:,:,:,:,:); %
+       params2.Male_FOT_term2 = params.Prop_sex_active_matrix(1,1,:,:,:,:,:,:,:).*params.Number_Contacts_matrix(1,1,:,:,:,:,:,:,:); %
+ 
+       %%
        
 switch model
     case 'Projections'
@@ -295,7 +386,7 @@ switch model
         params2.scale_ART_rec1=0;
         params2.scale_ART_rec2=0;
         
-        params2.ex_PWID_sex_trans_factor=1;
+          params2.ex_PWID_sex_trans_factor=1;
 
 
 
@@ -311,16 +402,11 @@ switch model
     
             myoutfemale= (deathdata.UI >=round(age_cessation) & deathdata.LI <= round(age_cessation) & strcmp(deathdata.Gender, 'Female'));
             myoutmale= (deathdata.UI >=round(age_cessation) & deathdata.LI <= round(age_cessation) & strcmp(deathdata.Gender, 'Male'));
-            myoutfemale;
-            age_cessation;
             tmp1= deathdata(myoutfemale,:).Value;
             tmp2= deathdata(myoutmale,:).Value;
           x =  params.prop_new_PWID_male*tmp2 + (1-params.prop_new_PWID_male)*tmp1;
-
         params2.mu_death_ex = 1./x;
-
-        
-        
+        %params2.mu_death_ex
        
         
         % prop virally supressed on and off ost
@@ -344,50 +430,48 @@ switch model
         params.delta_ART_inj_OST = prop_VS_OST.*delta_ART_VS + (1-prop_VS_OST).*delta_ART_non_VS;
         
         % create matrix of risk for denominator for injecting FOI
-        HIV_inj_matrix_denom = ones(2,2,2,4,3,4,8);
+        HIV_inj_matrix_denom = ones(2,2,2,4,3,4,8,3,7);
         % EX-pwid have 0 risk
-        HIV_inj_matrix_denom(2,:,:,:,:,:,:)=0;
+        HIV_inj_matrix_denom(2,:,:,:,:,:,:,:,:)=0;
         % different risk for females in community
-        HIV_inj_matrix_denom(1,2,:,[1,3,4],:,:,:)=params.RR_inject_female*HIV_inj_matrix_denom(1,2,:,[1,3,4],:,:,:);
+        HIV_inj_matrix_denom(1,2,:,[1,3,4],:,:,:,:,:)=params.RR_inject_female*HIV_inj_matrix_denom(1,2,:,[1,3,4],:,:,:,:,:);
         % different risk for younger PWID in community
-        HIV_inj_matrix_denom(1,:,1,[1,3,4],:,:,:)=params.RR_inject_young*HIV_inj_matrix_denom(1,:,1,[1,3,4],:,:,:);
+        HIV_inj_matrix_denom(1,:,1,[1,3,4],:,:,:,:,:)=params.RR_inject_young*HIV_inj_matrix_denom(1,:,1,[1,3,4],:,:,:,:,:);
         % different risk for incarceration states
-        HIV_inj_matrix_denom(1,:,:,2,:,:,:)=params.RR_inject_prison*HIV_inj_matrix_denom(1,:,:,2,:,:,:);
-        HIV_inj_matrix_denom(1,:,:,3,:,:,:)=params.RR_inject_post_release*HIV_inj_matrix_denom(1,:,:,3,:,:,:);
-        HIV_inj_matrix_denom(1,:,:,4,:,:,:)=params.RR_inject_ever_inc*HIV_inj_matrix_denom(1,:,:,4,:,:,:);
-        % different risk for homelss
-        HIV_inj_matrix_denom(1,:,:,:,2,:,:)=params.RR_inject_homeless*HIV_inj_matrix_denom(1,:,:,:,2,:,:);
+        HIV_inj_matrix_denom(1,:,:,2,:,:,:,:,:)=params.RR_inject_prison*HIV_inj_matrix_denom(1,:,:,2,:,:,:,:,:);
+        HIV_inj_matrix_denom(1,:,:,3,:,:,:,:,:)=params.RR_inject_post_release*HIV_inj_matrix_denom(1,:,:,3,:,:,:,:,:);
+        HIV_inj_matrix_denom(1,:,:,4,:,:,:,:,:)=params.RR_inject_ever_inc*HIV_inj_matrix_denom(1,:,:,4,:,:,:,:,:);
+        % different risk for homeless
+        HIV_inj_matrix_denom(1,:,:,:,2,:,:,:,:)=params.RR_inject_homeless*HIV_inj_matrix_denom(1,:,:,:,2,:,:,:,:);
         % different risk for those on OST
-        HIV_inj_matrix_denom(1,:,:,:,:,2,:)=params.RR_HIV_OST*HIV_inj_matrix_denom(1,:,:,:,:,2,:);
-        HIV_inj_matrix_denom(1,:,:,:,:,3,:)=params.RR_HIV_OST*HIV_inj_matrix_denom(1,:,:,:,:,3,:);
+        HIV_inj_matrix_denom(1,:,:,:,:,2,:,:,:)=params.RR_HIV_OST*HIV_inj_matrix_denom(1,:,:,:,:,2,:,:,:);
+        HIV_inj_matrix_denom(1,:,:,:,:,3,:,:,:)=params.RR_HIV_OST*HIV_inj_matrix_denom(1,:,:,:,:,3,:,:,:);
         % those with aids not on ART not engaging in IDU
-        HIV_inj_matrix_denom(:,:,:,:,:,:,7)=0;
+        HIV_inj_matrix_denom(:,:,:,:,:,:,7,:,:)=0;
         
         % create matrix of risk & infectivity for numerator for injecting FOI
         HIV_inj_matrix_num = HIV_inj_matrix_denom;
         % different infectivity for each disease stage - susceptibles
-        HIV_inj_matrix_num(:,:,:,:,:,:,1)=0;
+        HIV_inj_matrix_num(:,:,:,:,:,:,1,:,:)=0;
         % different infectivity for each disease stage - acute
-        HIV_inj_matrix_num(:,:,:,:,:,:,2)=params.delta_acute*HIV_inj_matrix_num(:,:,:,:,:,:,2);
+        HIV_inj_matrix_num(:,:,:,:,:,:,2,:,:)=params.delta_acute*HIV_inj_matrix_num(:,:,:,:,:,:,2,:,:);
         % different infectivity for each disease stage - pre-aids and aids
-        HIV_inj_matrix_num(:,:,:,:,:,:,5:8)=params.delta_preaids*HIV_inj_matrix_num(:,:,:,:,:,:,5:8);
+        HIV_inj_matrix_num(:,:,:,:,:,:,5:8,:,:)=params.delta_preaids*HIV_inj_matrix_num(:,:,:,:,:,:,5:8,:,:);
         % effect of ART
-        HIV_inj_matrix_num(:,:,:,:,:,[1,4],[4,6,8])=params.delta_ART_inj_off_OST*HIV_inj_matrix_num(:,:,:,:,:,[1,4],[4,6,8]);
-        HIV_inj_matrix_num(:,:,:,:,:,[2,3],[4,6,8])=params.delta_ART_inj_OST*HIV_inj_matrix_num(:,:,:,:,:,[2,3],[4,6,8]);
+        HIV_inj_matrix_num(:,:,:,:,:,[1,4],[4,6,8],:,:)=params.delta_ART_inj_off_OST*HIV_inj_matrix_num(:,:,:,:,:,[1,4],[4,6,8],:,:);
+        HIV_inj_matrix_num(:,:,:,:,:,[2,3],[4,6,8],:,:)=params.delta_ART_inj_OST*HIV_inj_matrix_num(:,:,:,:,:,[2,3],[4,6,8],:,:);
         
         params2.HIV_inj_matrix_num_909090 = HIV_inj_matrix_num;
         params2.HIV_inj_matrix_denom_909090 = HIV_inj_matrix_denom;
         clear HIV_inj_matrix_num HIV_inj_matrix_denom
         
-        
-        weighted_prev = ones(2,2,2,4,3,4,8);
-        weighted_prev(:,:,:,:,:,:,1)=0;
-        weighted_prev(:,:,:,:,:,:,2)=params.delta_acute*weighted_prev(:,:,:,:,:,:,2);
-        weighted_prev(:,:,:,:,:,:,5:8)=params.delta_preaids*weighted_prev(:,:,:,:,:,:,5:8);
-        weighted_prev(:,:,:,:,:,[1,4],[4,6,8])=params.delta_ART_inj_off_OST*weighted_prev(:,:,:,:,:,[1,4],[4,6,8]);
-        weighted_prev(:,:,:,:,:,[2,3],[4,6,8])=params.delta_ART_inj_OST*weighted_prev(:,:,:,:,:,[2,3],[4,6,8]);
-        
-
+       
+        weighted_prev = ones(2,2,2,4,3,4,8,3,7);
+        weighted_prev(:,:,:,:,:,:,1,:,:)=0;
+        weighted_prev(:,:,:,:,:,:,2,:,:)=params.delta_acute*weighted_prev(:,:,:,:,:,:,2,:,:);
+        weighted_prev(:,:,:,:,:,:,5:8,:,:)=params.delta_preaids*weighted_prev(:,:,:,:,:,:,5:8,:,:);
+        weighted_prev(:,:,:,:,:,[1,4],[4,6,8],:,:)=params.delta_ART_inj_off_OST*weighted_prev(:,:,:,:,:,[1,4],[4,6,8],:,:);
+        weighted_prev(:,:,:,:,:,[2,3],[4,6,8],:,:)=params.delta_ART_inj_OST*weighted_prev(:,:,:,:,:,[2,3],[4,6,8],:,:);
         
         params2.weighted_prev_909090 = weighted_prev;
         clear weighted_prev;
