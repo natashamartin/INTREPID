@@ -1,0 +1,54 @@
+#!/bin/bash
+#SBATCH --job-name="bat1"
+#SBATCH --nodes=1
+#SBATCH --tasks-per-node=24
+#SBATCH --mem=48GB ## should usually be at least twice the number of gigabytes as processors.
+#SBATCH -t 12:00:00
+
+# SBATCH --array=0-23
+#SBATCH --array=0-0
+#SBATCH -o %x.proj_%a.out.txt
+#SBATCH -e %x.proj_%a.err.txt
+
+
+#SBATCH -p ind-shared
+#SBATCH -A csd722
+
+
+
+#SBATCH --mail-user="achaillon@health.ucsd.edu"
+#SBATCH --mail-type="all"
+
+
+countries=( UA )
+
+# export OMP_NUM_THREADS=24
+export PATH=/expanse/lustre/scratch/jpg/temp_project/matlab_2020b/bin:$PATH
+
+
+# Create a temporary directory on scratch
+mkdir -p .matlab/local_cluster_jobs/R2019b/$SLURM_JOB_ID
+
+
+module load matlab
+
+matlab -nodisplay -r "ABC_plot_john_projections_duration_new8('${countries[$SLURM_ARRAY_TASK_ID]}','Results/07-17-2022/${countries[$SLURM_ARRAY_TASK_ID]}/RUNS1',0,1,48);exit"
+matlab -nodisplay -r "ABC_plot_john_projections_duration_new8('${countries[$SLURM_ARRAY_TASK_ID]}','Results/07-17-2022/${countries[$SLURM_ARRAY_TASK_ID]}/RUNS1',1,1,48);exit"
+matlab -nodisplay -r "ABC_plot_john_projections_duration_new8('${countries[$SLURM_ARRAY_TASK_ID]}','Results/07-17-2022/${countries[$SLURM_ARRAY_TASK_ID]}/RUNS1',2,1,48);exit"
+matlab -nodisplay -r "ABC_plot_john_projections_duration_new8('${countries[$SLURM_ARRAY_TASK_ID]}','Results/07-17-2022/${countries[$SLURM_ARRAY_TASK_ID]}/RUNS1',3,1,48);exit"
+matlab -nodisplay -r "ABC_plot_john_projections_duration_new8('${countries[$SLURM_ARRAY_TASK_ID]}','Results/07-17-2022/${countries[$SLURM_ARRAY_TASK_ID]}/RUNS1',4,1,48);exit"
+matlab -nodisplay -r "ABC_plot_john_projections_duration_new8('${countries[$SLURM_ARRAY_TASK_ID]}','Results/07-17-2022/${countries[$SLURM_ARRAY_TASK_ID]}/RUNS1',5,1,48);exit"
+matlab -nodisplay -r "ABC_plot_john_projections_duration_new8('${countries[$SLURM_ARRAY_TASK_ID]}','Results/07-17-2022/${countries[$SLURM_ARRAY_TASK_ID]}/RUNS1',6,1,48);exit"
+matlab -nodisplay -r "ABC_plot_john_projections_duration_new8('${countries[$SLURM_ARRAY_TASK_ID]}','Results/07-17-2022/${countries[$SLURM_ARRAY_TASK_ID]}/RUNS1',7,1,48);exit"
+
+# matlab -nodisplay -r "ABC_plot_john_projections_duration_new('${countries[$SLURM_ARRAY_TASK_ID]}','ABC_outputs/${countries[$SLURM_ARRAY_TASK_ID]}/ABC_06-21-2022 18-49-33_${countries[$SLURM_ARRAY_TASK_ID]}_1000.mat','Results/07-01-2022/${countries[$SLURM_ARRAY_TASK_ID]}/RUNS1',7,1,48);exit"
+
+
+
+
+
+
+# Cleanup local work directory
+rm -rf .matlab/local_cluster_jobs/R2019b/$SLURM_JOB_ID
+
+
